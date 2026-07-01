@@ -1,0 +1,15 @@
+.clock {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 60px;
+    font-family: "Trebuchet MS";
+}
+
+.clock h2, .clock h4 {
+    margin: 0;
+}
+
+.clock h4 {
+    font-size: 30px;
+}

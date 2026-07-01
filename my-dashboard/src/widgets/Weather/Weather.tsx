@@ -1,3 +1,5 @@
+import "./Weather.css"
+
 function Weather() {
     return (
         <section className="widget weather">

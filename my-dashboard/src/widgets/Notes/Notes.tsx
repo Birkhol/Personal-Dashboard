@@ -1,3 +1,5 @@
+import "./Notes.css"
+
 function Notes() {
     return (
         <section className="widget notes">
