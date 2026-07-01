@@ -1,13 +1,7 @@
-import { useState } from 'react'
-import './App.css'
+import Dashboard from "./components/layout/Dashboard"
 
 function App() {
-
-  return (
-    <>
-      
-    </>
-  )
+  return <Dashboard />
 }
 
 export default App

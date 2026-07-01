@@ -1,0 +1,18 @@
+.dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 20px;
+    gap: 20px;
+}
+
+.widget {
+    background: #2b2b2b;
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    min-height: 150px;
+}
+
+.clock, .notes {
+    grid-column: span 2;
+}
