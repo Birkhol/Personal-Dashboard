@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import "./Todo.css"
 
 type TodoItem = {
@@ -8,13 +8,21 @@ type TodoItem = {
 }
 
 function Todo() {
-    const [todoList, setTodoList] = useState<TodoItem[]>([
-        { id: 1, text: "Work on project", completed: false },
-        { id: 2, text: "Go for a jog", completed: false },
-        { id: 3, text: "Make dinner", completed: false },
-    ])
+    const [todoList, setTodoList] = useState<TodoItem[]>(() => {
+        const savedTodos = localStorage.getItem("todos")
+
+        if (savedTodos === null) {
+            return []
+        }
+
+        return JSON.parse(savedTodos)
+    })
 
     const [newTask, setNewTask] = useState("")
+
+    useEffect(() => {
+        localStorage.setItem("todos", JSON.stringify(todoList))
+    }, [todoList])
 
     function addTask(event: React.SubmitEvent<HTMLFormElement>) {
         event.preventDefault()
