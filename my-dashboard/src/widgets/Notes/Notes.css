@@ -1,0 +1,14 @@
+.notes textarea {
+    width: 100%;
+    min-height: 160px;
+    resize: vertical;
+    border: 2px solid gray;
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+.notes textarea:focus {
+    outline: none;
+    transition: 0.25s;
+    border: 2px solid #455EB5;
+}
