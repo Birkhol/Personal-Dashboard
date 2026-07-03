@@ -56,22 +56,24 @@ function Todo() {
     return (
         <section className="widget todo">
             <h2>Todo</h2>
-            <ul>
-                {todoList.map(todo =>
-                    <li key={todo.id}> <input type="checkbox" checked={todo.completed} onChange={() => toggleTodo(todo.id)} />
-                    <span id="todoText" className={todo.completed ? "completed" : ""}>
-                        {todo.text}
-                    </span>
-                    <button type="button" id="deleteButton" onClick={() => deleteTodo(todo.id)}>
-                        &#128465;
-                    </button>
-                    </li>
-                )}
-            </ul>
-            <form onSubmit={addTask} autoComplete="off">
-                <input type="text" value={newTask} name="todoAdd" id="todoAdd" onChange={event => setNewTask(event.target.value)}></input>
-                <input type="submit" value="Add" id="addTaskButton"></input>
-            </form>
+            <div className="widget-content">
+                <ul>
+                    {todoList.map(todo =>
+                        <li key={todo.id}> <input type="checkbox" checked={todo.completed} onChange={() => toggleTodo(todo.id)} />
+                        <span id="todoText" className={todo.completed ? "completed" : ""}>
+                            {todo.text}
+                        </span>
+                        <button type="button" id="deleteButton" onClick={() => deleteTodo(todo.id)}>
+                            &#128465;
+                        </button>
+                        </li>
+                    )}
+                </ul>
+                <form onSubmit={addTask} autoComplete="off">
+                    <input type="text" value={newTask} name="todoAdd" id="todoAdd" onChange={event => setNewTask(event.target.value)}></input>
+                    <input type="submit" value="Add" id="addTaskButton"></input>
+                </form>
+            </div>
         </section>
     )
 }

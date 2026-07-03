@@ -18,7 +18,9 @@ function Notes() {
     return (
         <section className="widget notes">
             <h2>Notes</h2>
-            <textarea value={note} onChange={event => setNote(event.target.value)} placeholder="Write your notes here..." />
+            <div className="widget-content">
+                <textarea value={note} onChange={event => setNote(event.target.value)} placeholder="Write your notes here..." />
+            </div>
         </section>
     )
 }

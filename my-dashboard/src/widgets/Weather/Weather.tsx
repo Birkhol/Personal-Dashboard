@@ -60,9 +60,11 @@ function Weather() {
     return (
         <section className="widget weather">
             <h2>{weather.city}</h2>
-            <h2 className="weather-icon">{weatherInfo.icon}</h2>
-            <h3>{weather.temperature}°C</h3>
-            <p>Wind: {weather.windSpeed} m/s</p>
+            <div className="widget-content">
+                <h2 className="weather-icon">{weatherInfo.icon}</h2>
+                <h3>{weather.temperature}°C</h3>
+                <p>Wind: {weather.windSpeed} m/s</p>
+            </div>
         </section>
     )
 }
