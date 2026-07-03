@@ -10,6 +10,14 @@
     margin: 0;
 }
 
+.clock h2 {
+    color: white;
+    text-shadow:
+        0 0 4px rgba(190, 219, 255, 0.6),
+        0 0 6px rgba(203, 180, 255, 0.4),
+        0 0 8px rgba(190, 215, 255, 0.25);
+}
+
 .clock h4 {
     font-size: 30px;
 }

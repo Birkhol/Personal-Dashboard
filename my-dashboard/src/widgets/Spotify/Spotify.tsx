@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { FaSpotify } from "react-icons/fa"
 import {
     getCurrentlyPlaying,
     handleSpotifyCallback,
@@ -37,7 +38,9 @@ function Spotify() {
         async function loadCurrentlyPlaying() {
             try {
                 const currentlyPlaying = await getCurrentlyPlaying()
+
                 setTrack(currentlyPlaying)
+                setError("")
             } catch (error) {
                 console.error(error)
                 setError("Could not load Spotify track.")
@@ -64,7 +67,7 @@ function Spotify() {
     if (!isLoggedIn) {
         return (
             <section className="widget spotify">
-                <h2>Spotify</h2>
+                <h2 className="spotify-title"><FaSpotify />Spotify</h2>
                 <button type="button" className="spotify-button" onClick={loginWithSpotify}>Login with Spotify</button>
             </section>
         )
@@ -72,7 +75,7 @@ function Spotify() {
 
     return (
         <section className="widget spotify">
-            <h2>Spotify</h2>
+            <h2 className="spotify-title"><FaSpotify />Spotify</h2>
             <div className="widget-content">
                 {isLoading && <p>Loading...</p>}
                 {!isLoading && track === null && <p>Nothing currently playing</p>}
@@ -85,7 +88,9 @@ function Spotify() {
                         <div>
                             <h3>{track.title}</h3>
                             <p>{track.artist}</p>
-                            <p>{track.isPlaying ? "Playing" : "Paused"}</p>
+                            <div className="song-status">
+                                <p className={track.isPlaying ? "isPlaying" : "isPaused"}>{track.isPlaying ? "Playing" : "Paused"}</p>
+                            </div>
                         </div>
                     </div>
                 )}
