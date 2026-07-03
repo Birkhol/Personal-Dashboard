@@ -56,11 +56,14 @@
 }
 
 #todoAdd {
-    border: 2px solid gray;
+    color: white;
+    background: rgba(30, 30, 30, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px solid rgba(255, 255, 255, 0.15);
     border-radius: 6px;
-    height: 23px;
+    height: 25px;
     padding: 2px 4px;
-    background-color: rgb(228, 228, 228);
     min-width: 200px;
     width: 25%;
 }

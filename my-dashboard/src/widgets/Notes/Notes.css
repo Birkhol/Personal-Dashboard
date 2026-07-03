@@ -1,10 +1,15 @@
 .notes textarea {
+    color: white;
+    background: rgba(30, 30, 30, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     width: 100%;
     min-height: 160px;
     resize: vertical;
-    border: 2px solid gray;
+    border: 2px solid rgba(255, 255, 255, 0.15);
     border-radius: 6px;
     padding: 8px 12px;
+    font-size: 16px;
 }
 
 .notes textarea:focus {

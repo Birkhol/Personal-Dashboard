@@ -3,7 +3,8 @@ const redirectUri = import.meta.env.VITE_SPOTIFY_REDIRECT_URI
 
 const authorizationEndpoint = "https://accounts.spotify.com/authorize"
 const tokenEndpoint = "https://accounts.spotify.com/api/token"
-const currentlyPlayingEndpoint = "https://api.spotify.com/v1/me/player/currently-playing"
+const currentlyPlayingEndpoint =
+    "https://api.spotify.com/v1/me/player/currently-playing"
 
 const scopes = ["user-read-currently-playing", "user-read-playback-state"]
 
@@ -96,11 +97,76 @@ export async function handleSpotifyCallback() {
     const data = await response.json()
 
     localStorage.setItem("spotify_access_token", data.access_token)
+    localStorage.setItem("spotify_refresh_token", data.refresh_token)
+    localStorage.setItem(
+        "spotify_token_expires_at",
+        String(Date.now() + data.expires_in * 1000)
+    )
+
     localStorage.removeItem("spotify_code_verifier")
 }
 
-export async function getCurrentlyPlaying(): Promise<SpotifyTrack | null> {
+async function refreshAccessToken() {
+    const refreshToken = localStorage.getItem("spotify_refresh_token")
+
+    if (!refreshToken) {
+        logoutSpotify()
+        throw new Error("No Spotify refresh token found")
+    }
+
+    const body = new URLSearchParams({
+        client_id: clientId,
+        grant_type: "refresh_token",
+        refresh_token: refreshToken
+    })
+
+    const response = await fetch(tokenEndpoint, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body
+    })
+
+    if (!response.ok) {
+        logoutSpotify()
+        throw new Error("Could not refresh Spotify access token")
+    }
+
+    const data = await response.json()
+
+    localStorage.setItem("spotify_access_token", data.access_token)
+    localStorage.setItem(
+        "spotify_token_expires_at",
+        String(Date.now() + data.expires_in * 1000)
+    )
+
+    if (data.refresh_token) {
+        localStorage.setItem("spotify_refresh_token", data.refresh_token)
+    }
+
+    return data.access_token
+}
+
+async function getValidAccessToken() {
     const accessToken = localStorage.getItem("spotify_access_token")
+    const expiresAt = localStorage.getItem("spotify_token_expires_at")
+
+    if (!accessToken || !expiresAt) {
+        return null
+    }
+
+    const tokenIsExpired = Date.now() > Number(expiresAt) - 60000
+
+    if (tokenIsExpired) {
+        return await refreshAccessToken()
+    }
+
+    return accessToken
+}
+
+export async function getCurrentlyPlaying(): Promise<SpotifyTrack | null> {
+    const accessToken = await getValidAccessToken()
 
     if (!accessToken) {
         return null
@@ -116,6 +182,11 @@ export async function getCurrentlyPlaying(): Promise<SpotifyTrack | null> {
         return null
     }
 
+    if (response.status === 401) {
+        logoutSpotify()
+        throw new Error("Spotify session expired. Please log in again.")
+    }
+
     if (!response.ok) {
         throw new Error("Could not fetch currently playing track")
     }
@@ -124,17 +195,21 @@ export async function getCurrentlyPlaying(): Promise<SpotifyTrack | null> {
 
     return {
         title: data.item.name,
-        artist: data.item.artists.map((artist: { name: string }) => artist.name).join(", "),
+        artist: data.item.artists
+            .map((artist: { name: string }) => artist.name)
+            .join(", "),
         albumImageUrl: data.item.album.images[0]?.url ?? "",
         isPlaying: data.is_playing
     }
 }
 
 export function isSpotifyLoggedIn() {
-    return localStorage.getItem("spotify_access_token") !== null
+    return localStorage.getItem("spotify_refresh_token") !== null
 }
 
 export function logoutSpotify() {
     localStorage.removeItem("spotify_access_token")
+    localStorage.removeItem("spotify_refresh_token")
+    localStorage.removeItem("spotify_token_expires_at")
     localStorage.removeItem("spotify_code_verifier")
 }

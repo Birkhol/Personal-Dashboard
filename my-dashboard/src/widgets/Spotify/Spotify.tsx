@@ -65,7 +65,7 @@ function Spotify() {
         return (
             <section className="widget spotify">
                 <h2>Spotify</h2>
-                <button type="button" onClick={loginWithSpotify}>Login with Spotify</button>
+                <button type="button" className="spotify-button" onClick={loginWithSpotify}>Login with Spotify</button>
             </section>
         )
     }
@@ -90,7 +90,7 @@ function Spotify() {
                     </div>
                 )}
 
-                <button type="button" id="spotify-button" onClick={handleLogout}>Logout</button>
+                <button type="button" className="spotify-button" onClick={handleLogout}>Logout</button>
             </div>
             {error && <p>{error}</p>}
         </section>
