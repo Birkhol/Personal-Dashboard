@@ -7,8 +7,13 @@ export type WeatherData = {
     weatherCode: number
 }
 
-export async function getWeatherByCoordinates(coordinates: Coordinates): Promise<WeatherData> {
-    const { latitude, longitude } = coordinates
+let cachedCityName: string | null = null
+
+export async function getWeatherByCoordinates(
+    coordinates: Coordinates
+): Promise<WeatherData> {
+    const latitude = Number(coordinates.latitude.toFixed(3))
+    const longitude = Number(coordinates.longitude.toFixed(3))
 
     const weatherResponse = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&temperature_unit=celsius&wind_speed_unit=ms`
@@ -24,12 +29,14 @@ export async function getWeatherByCoordinates(coordinates: Coordinates): Promise
         throw new Error("Weather data is missing")
     }
 
-    const city = await getCityName(coordinates)
+    if (!cachedCityName) {
+        cachedCityName = await getCityName({ latitude, longitude })
+    }
 
     return {
-        city,
-        temperature: weatherData.current_weather.temperature,
-        windSpeed: weatherData.current_weather.windspeed,
+        city: cachedCityName,
+        temperature: Math.round(weatherData.current_weather.temperature),
+        windSpeed: Math.round(weatherData.current_weather.windspeed),
         weatherCode: weatherData.current_weather.weathercode
     }
 }
