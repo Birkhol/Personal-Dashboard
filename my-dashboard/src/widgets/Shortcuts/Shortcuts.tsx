@@ -1,5 +1,6 @@
 import "./Shortcuts.css"
-import { FaGithub, FaYoutube, FaSpotify, FaFacebook, FaTwitch } from "react-icons/fa"
+import { FaGithub, FaYoutube, FaFacebook, FaTwitch } from "react-icons/fa"
+import { FaXTwitter } from "react-icons/fa6"
 import { SiGmail } from "react-icons/si"
 
 const shortcuts = [
@@ -22,6 +23,11 @@ const shortcuts = [
         name: "Gmail",
         url: "https://gmail.com",
         icon: <SiGmail />
+    },
+    {
+        name: "X",
+        url: "https://x.com",
+        icon: <FaXTwitter />
     },
     {
         name: "GitHub",
