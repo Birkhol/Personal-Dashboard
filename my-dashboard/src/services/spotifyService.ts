@@ -64,7 +64,7 @@ export async function handleSpotifyCallback() {
         return
     }
 
-    window.history.replaceState({}, document.title, "/")
+    window.history.replaceState({}, "", window.location.pathname)
 
     const codeVerifier = localStorage.getItem("spotify_code_verifier")
 
