@@ -12,13 +12,18 @@ function Weather() {
     useEffect(() => {
         async function loadWeather() {
             try {
+                setError("")
+
                 const coordinates = await getCurrentPosition()
                 const weatherData = await getWeatherByCoordinates(coordinates)
 
                 setWeather(weatherData)
             } catch (error) {
                 console.error(error)
-                setError("Could not load weather.")
+
+                if (!weather) {
+                    setError("Could not load weather.")
+                }
             } finally {
                 setIsLoading(false)
             }
