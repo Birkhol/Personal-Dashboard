@@ -1,0 +1,20 @@
+.cat-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.cat-image {
+    max-width: 100%;
+    max-height: 200px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+.cat-image:hover {
+    transform: scale(1.02);
+}
