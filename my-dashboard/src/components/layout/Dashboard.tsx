@@ -6,6 +6,7 @@ import Notes from "../../widgets/Notes/Notes"
 import Spotify from "../../widgets/Spotify/Spotify"
 import Shortcuts from "../../widgets/Shortcuts/Shortcuts"
 import Cat from "../../widgets/Cat/Cat"
+import News from "../../widgets/News/News"
 
 function Dashboard() {
     return (
@@ -13,10 +14,11 @@ function Dashboard() {
             <Clock />
             <Weather />
             <Spotify />
+            <News />
             <Todo />
             <Shortcuts />
-            <Notes />
             <Cat />
+            <Notes />
         </main>
     )
 }
