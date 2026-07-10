@@ -83,16 +83,22 @@ function News() {
 }
 
 function formatPublishedAt(publishedAt: string): string {
-    const date = new Date(publishedAt)
+    const normalizedPublishedAt = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(publishedAt)
+        ? `${publishedAt.replace(" ", "T")}Z`
+        : publishedAt
+    const date = new Date(normalizedPublishedAt)
 
     if (Number.isNaN(date.getTime())) {
         return ""
     }
 
-    return new Intl.DateTimeFormat("nb-NO", {
+    const time = new Intl.DateTimeFormat("nb-NO", {
+        timeZone: "Europe/Oslo",
         hour: "2-digit",
         minute: "2-digit"
     }).format(date)
+
+    return [time].filter(Boolean).join(" ")
 }
 
 export default News
