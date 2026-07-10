@@ -9,9 +9,43 @@ export type NewsArticle = {
 
 const VG_RSS_FEED_URL = "https://www.vg.no/rss/feed"
 const VG_RSS_PROXY_URL = "/api/vg-rss"
+const RSS_TO_JSON_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(VG_RSS_FEED_URL)}`
+
+type RssToJsonItem = {
+    title?: string
+    description?: string
+    link?: string
+    pubDate?: string
+    thumbnail?: string
+    enclosure?: {
+        link?: string
+    }
+    categories?: string[]
+}
+
+type RssToJsonResponse = {
+    status?: string
+    items?: RssToJsonItem[]
+}
 
 export async function getTopVgArticle(): Promise<NewsArticle> {
-    const feedXml = await fetchVgFeed()
+    try {
+        return await getTopVgArticleFromXml(VG_RSS_PROXY_URL)
+    } catch (error) {
+        console.warn("Could not fetch VG feed through local proxy.", error)
+    }
+
+    try {
+        return await getTopVgArticleFromJson()
+    } catch (error) {
+        console.warn("Could not fetch VG feed through RSS JSON fallback.", error)
+    }
+
+    return getTopVgArticleFromXml(VG_RSS_FEED_URL)
+}
+
+async function getTopVgArticleFromXml(url: string): Promise<NewsArticle> {
+    const feedXml = await fetchText(url)
     const rssDocument = new DOMParser().parseFromString(feedXml, "application/xml")
     const parserError = rssDocument.querySelector("parsererror")
 
@@ -35,12 +69,27 @@ export async function getTopVgArticle(): Promise<NewsArticle> {
     }
 }
 
-async function fetchVgFeed(): Promise<string> {
-    try {
-        return await fetchText(VG_RSS_PROXY_URL)
-    } catch (error) {
-        console.warn("Could not fetch VG feed through local proxy.", error)
-        return fetchText(VG_RSS_FEED_URL)
+async function getTopVgArticleFromJson(): Promise<NewsArticle> {
+    const response = await fetch(RSS_TO_JSON_URL)
+
+    if (!response.ok) {
+        throw new Error("Could not fetch VG JSON feed")
+    }
+
+    const data = await response.json() as RssToJsonResponse
+    const topItem = data.items?.[0]
+
+    if (data.status !== "ok" || !topItem) {
+        throw new Error("VG JSON feed does not contain articles")
+    }
+
+    return {
+        title: getRequiredJsonText(topItem.title, "title"),
+        description: decodeHtml(topItem.description ?? ""),
+        link: getRequiredJsonText(topItem.link, "link"),
+        category: topItem.categories?.[0] ?? "",
+        publishedAt: topItem.pubDate ?? "",
+        imageUrl: decodeHtml(topItem.enclosure?.link ?? topItem.thumbnail ?? "")
     }
 }
 
@@ -76,4 +125,20 @@ function getImageUrl(item: Element): string {
         item.querySelector("enclosure")?.getAttribute("url") ||
         ""
     )
+}
+
+function getRequiredJsonText(value: string | undefined, fieldName: string): string {
+    const text = decodeHtml(value ?? "")
+
+    if (!text) {
+        throw new Error(`VG article is missing ${fieldName}`)
+    }
+
+    return text
+}
+
+function decodeHtml(value: string): string {
+    const htmlDocument = new DOMParser().parseFromString(value, "text/html")
+
+    return htmlDocument.documentElement.textContent?.trim() ?? value
 }
