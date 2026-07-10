@@ -9,7 +9,7 @@ export type NewsArticle = {
 
 const VG_RSS_FEED_URL = "https://www.vg.no/rss/feed"
 const VG_RSS_PROXY_URL = "/api/vg-rss"
-const RSS_TO_JSON_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(VG_RSS_FEED_URL)}`
+const RSS_CACHE_WINDOW_MS = 300000
 
 type RssToJsonItem = {
     title?: string
@@ -70,7 +70,9 @@ async function getTopVgArticleFromXml(url: string): Promise<NewsArticle> {
 }
 
 async function getTopVgArticleFromJson(): Promise<NewsArticle> {
-    const response = await fetch(RSS_TO_JSON_URL)
+    const response = await fetch(getRssToJsonUrl(), {
+        cache: "no-store"
+    })
 
     if (!response.ok) {
         throw new Error("Could not fetch VG JSON feed")
@@ -94,7 +96,9 @@ async function getTopVgArticleFromJson(): Promise<NewsArticle> {
 }
 
 async function fetchText(url: string): Promise<string> {
-    const response = await fetch(url)
+    const response = await fetch(url, {
+        cache: "no-store"
+    })
 
     if (!response.ok) {
         throw new Error("Could not fetch VG feed")
@@ -125,6 +129,13 @@ function getImageUrl(item: Element): string {
         item.querySelector("enclosure")?.getAttribute("url") ||
         ""
     )
+}
+
+function getRssToJsonUrl(): string {
+    const freshnessKey = Math.floor(Date.now() / RSS_CACHE_WINDOW_MS)
+    const freshFeedUrl = `${VG_RSS_FEED_URL}?fresh=${freshnessKey}`
+
+    return `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(freshFeedUrl)}`
 }
 
 function getRequiredJsonText(value: string | undefined, fieldName: string): string {
