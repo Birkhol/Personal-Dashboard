@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { getTopVgArticle, type NewsArticle } from "../../services/newsService"
 import "./News.css"
+import "../../components/layout/Dashboard.css"
 
 function News() {
     const [article, setArticle] = useState<NewsArticle | null>(null)
@@ -41,7 +42,7 @@ function News() {
             <h2>News</h2>
 
             <div className="widget-content">
-                {isLoading && <p>Loading...</p>}
+                {isLoading && <div className="loading-circle" />}
                 {!isLoading && error && <p>{error}</p>}
                 {!isLoading && article && (
                     <a

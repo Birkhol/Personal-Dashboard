@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { getRandomCat } from "../../services/catService"
 import "./Cat.css"
+import "../../components/layout/Dashboard.css"
 
 function Cat() {
     const [catUrl, setCatUrl] = useState("")
@@ -42,7 +43,7 @@ function Cat() {
 
             <div className="widget-content">
                 {loading ? (
-                    <p>Loading...</p>
+                    <div className="loading-circle" />
                 ) : (
                     <div className="cat-image-container">
                         <img

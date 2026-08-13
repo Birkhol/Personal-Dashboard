@@ -9,6 +9,7 @@ import {
     type SpotifyTrack
 } from "../../services/spotifyService"
 import "./Spotify.css"
+import "../../components/layout/Dashboard.css"
 
 function Spotify() {
     const [track, setTrack] = useState<SpotifyTrack | null>(null)
@@ -77,7 +78,7 @@ function Spotify() {
         <section className="widget spotify">
             <h2 className="spotify-title"><FaSpotify />Spotify</h2>
             <div className="widget-content">
-                {isLoading && <p>Loading...</p>}
+                {isLoading && <div className="loading-circle" />}
                 {!isLoading && track === null && <p>Nothing currently playing</p>}
                 {track && (
                     <div className="spotify-track">
