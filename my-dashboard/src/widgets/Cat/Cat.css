@@ -5,6 +5,20 @@
     gap: 10px;
 }
 
+.cat-image-button {
+    display: inline-flex;
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    cursor: pointer;
+}
+
+.cat-image-button:focus-visible {
+    outline: 3px solid #a993ff;
+    outline-offset: 4px;
+}
+
 .cat-image {
     max-width: 100%;
     max-height: 200px;
@@ -17,4 +31,53 @@
 
 .cat-image:hover {
     transform: scale(1.02);
+}
+
+.cat-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 24px 24px;
+    background: rgba(0, 0, 0, 0.88);
+    cursor: auto;
+}
+
+.cat-lightbox-image {
+    display: block;
+    max-width: 100%;
+    max-height: calc(100vh - 88px);
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    cursor: default;
+}
+
+.cat-lightbox-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    color: white;
+    font: inherit;
+    font-size: 32px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.cat-lightbox-close:hover,
+.cat-lightbox-close:focus-visible {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.cat-lightbox-close:focus-visible {
+    outline: 3px solid #a993ff;
+    outline-offset: 3px;
 }
