@@ -3,6 +3,7 @@ import { getCurrentPosition } from "../../services/locationService"
 import { getWeatherByCoordinates, type WeatherData } from "../../services/weatherService"
 import { getWeatherInfo } from "../../utils/weatherCode"
 import "./Weather.css"
+import "../../components/layout/Dashboard.css"
 
 function Weather() {
     const [weather, setWeather] = useState<WeatherData | null>(null)
@@ -42,7 +43,7 @@ function Weather() {
         return (
             <section className="widget weather">
                 <h2>Weather</h2>
-                <p>Loading...</p>
+                <div className="loading-circle"></div>
             </section>
         )
     }
