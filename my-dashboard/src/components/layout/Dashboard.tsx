@@ -1,4 +1,4 @@
-import { useEffect, useState, type DragEvent, type KeyboardEvent } from "react"
+import { useEffect, useState, type DragEvent } from "react"
 import "./Dashboard.css"
 import Clock from "../../widgets/Clock/Clock"
 import Weather from "../../widgets/Weather/Weather"
@@ -80,41 +80,6 @@ function Dashboard() {
         })
     }
 
-    function moveWidgetWithKeyboard(
-        event: KeyboardEvent<HTMLButtonElement>,
-        widgetId: WidgetId,
-    ) {
-        const columnCount = 3
-        const direction = {
-            ArrowLeft: -1,
-            ArrowRight: 1,
-            ArrowUp: -columnCount,
-            ArrowDown: columnCount,
-        }[event.key]
-
-        if (direction === undefined) return
-
-        event.preventDefault()
-
-        setWidgetOrder(currentOrder => {
-            const currentIndex = currentOrder.indexOf(widgetId)
-            const targetIndex = Math.max(
-                0,
-                Math.min(currentOrder.length - 1, currentIndex + direction),
-            )
-
-            if (currentIndex === targetIndex) return currentOrder
-
-            const nextOrder = [...currentOrder]
-            const targetWidget = nextOrder[targetIndex]
-
-            nextOrder[currentIndex] = targetWidget
-            nextOrder[targetIndex] = widgetId
-
-            return nextOrder
-        })
-    }
-
     function handleDragStart(event: DragEvent<HTMLDivElement>, widgetId: WidgetId) {
         const target = event.target as HTMLElement
         const isInteractiveElement = target.closest(
@@ -167,9 +132,8 @@ function Dashboard() {
                         <button
                             type="button"
                             className="widget-drag-handle"
-                            aria-label={`Move ${label} widget. Use the arrow keys or drag.`}
+                            aria-label={`Move ${label} widget. Click and drag.`}
                             title={`Drag to move ${label}`}
-                            onKeyDown={event => moveWidgetWithKeyboard(event, widgetId)}
                         >
                             &#8942;&#8942;
                         </button>
