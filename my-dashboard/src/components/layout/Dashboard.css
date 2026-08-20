@@ -20,6 +20,70 @@
     border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
+.draggable-widget {
+    position: relative;
+    min-width: 0;
+    cursor: grab;
+    transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.draggable-widget > .widget {
+    height: 100%;
+}
+
+.draggable-widget.is-dragging {
+    opacity: 0.45;
+    transform: scale(0.98);
+}
+
+.draggable-widget.is-drop-target > .widget {
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 3px rgba(103, 63, 215, 0.65);
+}
+
+.widget-drag-handle {
+    position: absolute;
+    z-index: 2;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 18px;
+    line-height: 1;
+    letter-spacing: -5px;
+    cursor: grab;
+    opacity: 0;
+    transition: background 150ms ease, color 150ms ease, opacity 150ms ease;
+}
+
+.draggable-widget:hover .widget-drag-handle,
+.widget-drag-handle:focus-visible {
+    opacity: 1;
+}
+
+.widget-drag-handle:hover,
+.widget-drag-handle:focus-visible {
+    background: rgba(255, 255, 255, 0.18);
+    color: white;
+    outline: none;
+}
+
+.draggable-widget:active,
+.widget-drag-handle:active {
+    cursor: grabbing;
+}
+
+@media (hover: none) {
+    .widget-drag-handle {
+        opacity: 1;
+    }
+}
+
 .widget-content {
     flex: 1;
     display: flex;
