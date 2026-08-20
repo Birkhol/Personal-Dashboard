@@ -54,8 +54,8 @@
     background: rgba(255, 255, 255, 0.08);
     color: rgba(255, 255, 255, 0.65);
     font-size: 18px;
-    line-height: 1;
-    letter-spacing: -5px;
+    line-height: -1;
+    letter-spacing: -1px;
     cursor: grab;
     opacity: 0;
     transition: background 150ms ease, color 150ms ease, opacity 150ms ease;

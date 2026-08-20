@@ -73,8 +73,8 @@ function Dashboard() {
             const currentIndex = nextOrder.indexOf(widgetId)
             const targetIndex = nextOrder.indexOf(targetId)
 
-            nextOrder.splice(currentIndex, 1)
-            nextOrder.splice(targetIndex, 0, widgetId)
+            nextOrder[currentIndex] = targetId
+            nextOrder[targetIndex] = widgetId
 
             return nextOrder
         })
@@ -106,8 +106,11 @@ function Dashboard() {
             if (currentIndex === targetIndex) return currentOrder
 
             const nextOrder = [...currentOrder]
-            const [movedWidget] = nextOrder.splice(currentIndex, 1)
-            nextOrder.splice(targetIndex, 0, movedWidget)
+            const targetWidget = nextOrder[targetIndex]
+
+            nextOrder[currentIndex] = targetWidget
+            nextOrder[targetIndex] = widgetId
+
             return nextOrder
         })
     }
@@ -168,7 +171,7 @@ function Dashboard() {
                             title={`Drag to move ${label}`}
                             onKeyDown={event => moveWidgetWithKeyboard(event, widgetId)}
                         >
-                            &#8942;
+                            &#8942;&#8942;
                         </button>
                         <Component />
                     </div>
